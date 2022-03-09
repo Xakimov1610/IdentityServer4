@@ -8,9 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="identityServer4" Version="4.1.2" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="IdentityServer4.aspnetidentity" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
     <PackageReference Include="microsoft.AspNetCore.IDentity.EntityFrameworkCore" Version="6.0.3" />
+    <PackageReference Include="microsoft.entityframeworkcore" Version="6.0.3" />
+    <PackageReference Include="microsoft.entityframeworkcore.design" Version="6.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="6.0.3" />
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver.design" Version="1.1.6" />
   </ItemGroup>
 
 </Project>

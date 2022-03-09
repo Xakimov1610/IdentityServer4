@@ -1,10 +1,17 @@
+using System.Reflection;
 using identity.Data;
 using identity.Entity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+});
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -14,8 +21,22 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+
 builder.Services.AddIdentityServer()
-.AddDeveloperSigningCredential();
+.AddDeveloperSigningCredential()
+.AddConfigurationStore(options =>
+{
+    options.ConfigureDbContext = b => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),
+        sql => sql.MigrationsAssembly(migrationsAssembly));
+    
+})
+.AddOperationalStore(options =>
+{
+    options.ConfigureDbContext = b => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),
+        sql => sql.MigrationsAssembly(migrationsAssembly));
+})
+.AddAspNetIdentity<User>();
 
 builder.Services.AddControllersWithViews();
 
