@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="identityServer4" Version="4.1.2" />
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
+    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
     <PackageReference Include="microsoft.AspNetCore.IDentity.EntityFrameworkCore" Version="6.0.3" />
   </ItemGroup>
 
