@@ -24,7 +24,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
 builder.Services.AddIdentityServer()
-.AddDeveloperSigningCredential()
 .AddConfigurationStore(options =>
 {
     options.ConfigureDbContext = b => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),
@@ -36,12 +35,22 @@ builder.Services.AddIdentityServer()
     options.ConfigureDbContext = b => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),
         sql => sql.MigrationsAssembly(migrationsAssembly));
 })
-.AddAspNetIdentity<User>();
+.AddDeveloperSigningCredential();
+
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.UseIdentityServer();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapDefaultControllerRoute();
+
+Seed.InitializeDatabase(app)
+    .GetAwaiter()
+    .GetResult();
 
 app.Run();
