@@ -1,13 +1,38 @@
 using System.Text.Json;
+using identity.Entity;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 public static class Seed
 {
+    public static async Task InitializeTestUsers(IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices
+            .GetRequiredService<IServiceScopeFactory>()
+            .CreateScope();
+
+        var userManager = scope.ServiceProvider
+            .GetRequiredService<UserManager<User>>();
+
+        var config = scope.ServiceProvider
+            .GetRequiredService<IConfiguration>();
+
+        if(!await userManager.Users.AnyAsync())
+        {
+            return;
+        }
+
+        var users = config.GetSection("Ilmhub:IdentityServer:TestUsers").Get<List<identity.Options.User>>();
+        foreach(var user in users)
+        {
+            await userManager.CreateAsync(new User() { Email = user.Email}, user.Password);
+        }
+    }
     
-    public static async Task InitializeDatabase(IApplicationBuilder app)
+    public static async Task InitializeConfiguration(IApplicationBuilder app)
     {
         using var scope = app.ApplicationServices
             .GetRequiredService<IServiceScopeFactory>()
