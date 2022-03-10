@@ -24,16 +24,19 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
 builder.Services.AddIdentityServer()
+.AddAspNetIdentity<User>()
 .AddConfigurationStore(options =>
 {
-    options.ConfigureDbContext = b => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),
-        sql => sql.MigrationsAssembly(migrationsAssembly));
+    options.ConfigureDbContext = b 
+        => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),sql 
+            => sql.MigrationsAssembly(migrationsAssembly));
     
 })
 .AddOperationalStore(options =>
 {
-    options.ConfigureDbContext = b => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),
-        sql => sql.MigrationsAssembly(migrationsAssembly));
+    options.ConfigureDbContext = b 
+        => b.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"),sql 
+            => sql.MigrationsAssembly(migrationsAssembly));
 })
 .AddDeveloperSigningCredential();
 
@@ -49,8 +52,10 @@ app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 
-Seed.InitializeDatabase(app)
-    .GetAwaiter()
-    .GetResult();
+// Seed.InitializeDatabase(app)
+//     .GetAwaiter()
+//     .GetResult();
+
+Seed.InitializeDatabase(app).GetAwaiter().GetResult();
 
 app.Run();

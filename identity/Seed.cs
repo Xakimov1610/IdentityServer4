@@ -1,3 +1,4 @@
+using System.Text.Json;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
@@ -18,9 +19,12 @@ public static class Seed
         scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
         configContext.Database.Migrate();
 
+        // var clien = config.GetSection("Ilmhub:IdentityServer:Clients").Get<List<Client>>();
+        // System.Console.WriteLine($"{JsonSerializer.Serialize(clien)}");
+
         if(!await configContext.Clients.AnyAsync())
         {
-            var clients = config.GetValue<List<Client>>(config["Ilmhub:IdentityServer:Clients"]);
+            var clients = config.GetSection(config["Ilmhub:IdentityServer:Clients"]).Get<List<Client>>();
             if(clients != null && clients.Count() > 0)
             {
                 var clientEntities = clients.Select(c => c.ToEntity());
@@ -30,7 +34,7 @@ public static class Seed
 
         if(!await configContext.ApiResources.AnyAsync())
         {
-            var apiResources = config.GetValue<List<ApiResource>>("Ilmhub:IdentityServer:ApiResources");
+            var apiResources = config.GetSection("Ilmhub:IdentityServer:ApiResources").Get<List<ApiResource>>();
             if(apiResources != null && apiResources.Count() > 0)
             {
                 var apiEntities = apiResources.Select(c => c.ToEntity());
@@ -40,7 +44,7 @@ public static class Seed
 
         if(!await configContext.ApiResources.AnyAsync())
         {
-            var apiScopes = config.GetValue<List<ApiScope>>("Ilmhub:IdentityServer:ApiScopes");
+            var apiScopes = config.GetSection("Ilmhub:IdentityServer:ApiScopes").Get<List<ApiScope>>();
             if(apiScopes != null && apiScopes.Count() > 0)
             {
                 var apiScopeEntities = apiScopes.Select(c => c.ToEntity());
@@ -50,7 +54,7 @@ public static class Seed
 
         if(!await configContext.IdentityResources.AnyAsync())
         {
-            var identityResources = config.GetValue<List<IdentityResource>>("Ilmhub:IdentityServer:IdentityResources");
+            var identityResources = config.GetSection("Ilmhub:IdentityServer:IdentityResources").Get<List<IdentityResource>>();
             if(identityResources != null && identityResources.Count() > 0)
             {
                 var identityEntities = identityResources.Select(c => c.ToEntity());
@@ -58,7 +62,7 @@ public static class Seed
             }
         }
 
-        // await Task.CompletedTask;
+        await configContext.SaveChangesAsync();
     }
 
 }
