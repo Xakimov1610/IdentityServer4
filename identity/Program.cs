@@ -54,5 +54,6 @@ app.MapDefaultControllerRoute();
 
 
 Seed.InitializeConfiguration(app).GetAwaiter().GetResult();
+Seed.InitializeTestUsers(app).GetAwaiter().GetResult();
 
 app.Run();
