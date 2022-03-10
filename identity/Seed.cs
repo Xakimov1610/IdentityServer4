@@ -28,7 +28,7 @@ public static class Seed
         var users = config.GetSection("Ilmhub:IdentityServer:TestUsers").Get<List<identity.Options.User>>();
         foreach(var user in users)
         {
-            await userManager.CreateAsync(new User() { Email = user.Email}, user.Password);
+            await userManager.CreateAsync(new User() { Email = user.Email, UserName = user.Username}, user.Password);
         }
     }
     
