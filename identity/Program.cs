@@ -52,9 +52,6 @@ app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 
-// Seed.InitializeDatabase(app)
-//     .GetAwaiter()
-//     .GetResult();
 
 Seed.InitializeDatabase(app).GetAwaiter().GetResult();
 

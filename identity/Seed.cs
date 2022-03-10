@@ -24,7 +24,7 @@ public static class Seed
 
         if(!await configContext.Clients.AnyAsync())
         {
-            var clients = config.GetSection(config["Ilmhub:IdentityServer:Clients"]).Get<List<Client>>();
+            var clients = config.GetSection("Ilmhub:IdentityServer:Clients").Get<List<Client>>();
             if(clients != null && clients.Count() > 0)
             {
                 var clientEntities = clients.Select(c => c.ToEntity());
